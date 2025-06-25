@@ -1,0 +1,39 @@
+module fsm (
+  input clk,
+  input rst,
+  input but_in,
+  output reg led_out
+);
+
+  // 1. State declarations
+  parameter IDLE = 1'b0,
+            PRESS = 1'b1;
+
+  reg current_state, next_state;
+
+  // 2. State register
+  always @(posedge clk or posedge rst) begin
+    if (rst)
+      current_state <= IDLE;
+    else
+      current_state <= next_state;
+  end
+
+  // 3. Next state logic
+  always @(*) begin
+    case (current_state)
+      IDLE:  next_state = (but_in == 1) ? PRESS : IDLE;
+      PRESS: next_state = (but_in == 0) ? IDLE : PRESS;
+      default: next_state = IDLE;
+    endcase
+  end
+
+  // 4. Output logic (toggle on rising edge)
+  always @(posedge clk or posedge rst) begin
+    if (rst)
+      led_out <= 0;
+    else if (current_state == IDLE && but_in == 1 && next_state == PRESS)
+      led_out <= ~led_out;  // Toggle LED only on rising edge
+  end
+
+endmodule

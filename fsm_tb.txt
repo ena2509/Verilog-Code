@@ -1,0 +1,70 @@
+// Code your testbench here
+// or browse Examples
+module tb_fsm();
+
+  // Declare testbench signals
+  reg clk;
+  reg rst;
+  reg but_in;
+  wire led_out;
+
+  // Instantiate the FSM
+  fsm uut (
+    .clk(clk),
+    .rst(rst),
+    .but_in(but_in),
+    .led_out(led_out)
+  );
+
+  // Clock generation (10ns period)
+  always #5 clk = ~clk;
+
+  initial begin
+    // 1. Initialize
+    clk = 0;
+    rst = 1;
+    but_in = 0;
+
+    // 2. Reset the FSM
+    #10;
+    rst = 0;
+
+    // 3. Simulate button presses
+
+    // First press (should toggle LED)
+    #10 but_in = 1;
+    #10 but_in = 0;
+
+    // Wait
+    #20;
+
+    // Second press (should toggle LED again)
+    #10 but_in = 1;
+    #10 but_in = 0;
+
+    // Bouncing simulation (multiple 1s without 0)
+    #10 but_in = 1;
+    #5  but_in = 1;
+    #5  but_in = 1;
+    #10 but_in = 0;
+
+    // Third clean press
+    #20 but_in = 1;
+    #10 but_in = 0;
+
+    #30 $finish;
+  end
+
+  // Optional: Monitor signal changes
+  initial begin
+    $display("Time\tclk\tbut_in\tled_out");
+    $monitor("%g\t%b\t%b\t%b", $time, clk, but_in, led_out);
+  end
+
+ //Dump waves (only required here)
+	initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars(1);
+  end 
+ 
+endmodule
