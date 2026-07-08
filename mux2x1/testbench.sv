@@ -3,21 +3,23 @@
 module testbench;
   reg a,b,s; 
   wire y;
+  integer i;
   //instantiate DUT
   mux2x1 dut(.a(a), .b(b), .s(s), .y(y));
   //apply test vectors
   initial begin
-    $monitor("Time=%0t a=%b b=%b s=%b y=%b",
-          $time, a, b, s, y);
-    a = 0; b = 0; s = 0;#10;
-    a = 0; b = 0; s = 1;#10;
-    a = 0; b = 1; s = 0;#10;   
-    a = 0; b = 1; s = 1;#10;
-    a = 1; b = 0; s = 0;#10;
-    a = 1; b = 0; s = 1;#10;
-    a = 1; b = 1; s = 0;#10;
-    a = 1; b = 1; s = 1;#10;
-    $finish;
+  for (i = 0; i < 8; i = i + 1) begin
+    {a, b, s} = i;
+    #1;
+
+    if (y !== (s ? b : a))
+        $display("FAIL: a=%b b=%b s=%b y=%b", a, b, s, y);
+    else
+        $display("PASS: a=%b b=%b s=%b y=%b", a, b, s, y);
+
+    #9;
+  end
+  $finish; 
   end
   initial begin
     $dumpfile("dump.vcd");
