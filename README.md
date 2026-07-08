@@ -1,5 +1,4 @@
-# FSM-Code ( BUTTON DEBOUNCER )
-Verilog Labs
+
 
 FSM Question: Button Debouncer (2-State Toggle)
 Problem:
