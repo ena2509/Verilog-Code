@@ -1,4 +1,11 @@
 // Code your design here
-module mux2x1(input a,b,s,output y);
-  assign y= (s==0)? a:b;
+module mux4x1(input a,b,c,d,input [1:0]s,output reg y);
+  always @(*) begin
+    case (s)
+        2'b00: y = a;
+        2'b01: y = b;
+        2'b10: y = c;
+        2'b11: y = d;
+    endcase
+end
 endmodule
