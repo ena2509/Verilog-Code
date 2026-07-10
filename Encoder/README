@@ -1,1 +1,2 @@
-
+8x3 encoder implemented using continuous assignment.
+Test vectors are generated using a for loop and shifing to make sure only one input is high at all time.
